@@ -5,6 +5,10 @@ class Notes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+            body: Center(
+              child: Text('Notes and assignment under contruction',
+              style: TextStyle(color:Colors.red,fontWeight: FontWeight.bold),
+              )),
         bottomNavigationBar:BottomBar(),
       );
   }
