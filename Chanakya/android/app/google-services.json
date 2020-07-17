@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "573359822449",
+    "firebase_url": "https://chanakya-1e702.firebaseio.com",
+    "project_id": "chanakya-1e702",
+    "storage_bucket": "chanakya-1e702.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:573359822449:android:470287a5216259ca6aedd0",
+        "android_client_info": {
+          "package_name": "com.bansalapoorv1997.Chanakya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "573359822449-b4fnn78gb3eclm01sghefb2eeilm6511.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOxGEFwRwuikCemzt48r0sxxrbraX2hIU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "573359822449-b4fnn78gb3eclm01sghefb2eeilm6511.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
