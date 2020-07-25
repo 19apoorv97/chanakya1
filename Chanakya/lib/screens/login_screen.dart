@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class LoginScreen extends StatefulWidget {
   static String id='login_screen';
   @override
@@ -16,6 +17,21 @@ class _LoginScreenState extends State<LoginScreen> {
   final _auth=FirebaseAuth.instance;
   String email;
   String password;
+
+  Future<void> autoLogin() async
+  {
+    final shared=await SharedPreferences.getInstance();
+    if(shared.getBool('isLoggedIn')==true)
+    {
+      Navigator.pushNamed(context, MyHomePage.id);
+    }
+  }
+  @override 
+  void initState() {
+    // TODO: implement initState
+    autoLogin();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,14 +82,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 24.0,
               ),
               LoginButton(button_text: 'Log In', button_color: Colors.lightBlueAccent, press: ()async{
+                final shared=await SharedPreferences.getInstance();
+                
                 setState(() {
                   _saving=true;
                 });
                 try{
                 final user =await _auth.signInWithEmailAndPassword(email: email, password: password);
                 if(user!=null)
+                {
+                  shared.setBool('isLoggedIn', true);
                   Navigator.pushNamed(context, MyHomePage.id);
-                
+                }
                 setState(() {
                   _saving=false;
                 });

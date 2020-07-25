@@ -1,9 +1,19 @@
-import 'package:Chanakya/bottom_bar.dart';
+//import 'package:Chanakya/bottom_bar.dart';
+import 'package:Chanakya/lectures.dart';
+import 'package:Chanakya/screens/assignment.dart';
 import 'package:Chanakya/screens/login_screen.dart';
+import 'package:Chanakya/screens/notes.dart';
+import 'package:Chanakya/screens/quiz.dart';
 import 'package:Chanakya/topic_tile.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+
+final _auth=FirebaseAuth.instance;
+String _userName='user';
 
 class MyHomePage extends StatefulWidget {  
   static String id='home_screen';
@@ -12,30 +22,45 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _auth=FirebaseAuth.instance;
-  String userName='user';
+  int _selectedIndex=0;
+
+  Widget bodyContent(int index)
+  {
+    if(index==0)
+      return Lectures();
+    else if(index==1)
+      return Notes();
+    else
+      return Assignment();
+  }
+  void bottomTap(int index)
+  {
+    setState(() {
+      _selectedIndex=index;
+      });
+  }
+
   Future<void> getCurrentUser() async
   {
     try{
     FirebaseUser current_user=await _auth.currentUser();
     if(current_user!=null)
     {
-      userName=current_user.email;
-      setState(() {
-        
-      });
+      _userName=current_user.email;
+      setState(() {});
     }
     }
-    catch(e)
-    {}
+    catch(e){}
   }
+
   @override
   void initState() {
     // TODO: implement initState
     getCurrentUser();
     super.initState();
   }
-@override
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
           child: Scaffold(
@@ -51,7 +76,37 @@ class _MyHomePageState extends State<MyHomePage> {
             })
           ],
         ),
-        drawer:Drawer(
+        drawer:Menu(),
+        body: bodyContent(_selectedIndex),
+        bottomNavigationBar: BottomNavigationBar(
+      onTap: (index){
+        if(index==3)
+          Navigator.pushNamed(context, Quizzler.id);
+        else
+          bottomTap(index);
+        },
+        currentIndex: _selectedIndex,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Color(0xFFFF0067),
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.black54,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.ondemand_video),title: Text('Home'),),
+          BottomNavigationBarItem(icon: Icon(Icons.class_),title: Text('Notes'),),
+          BottomNavigationBarItem(icon: Icon(Icons.assignment),title: Text('Assignment'),),
+          BottomNavigationBarItem(icon: Icon(Icons.timer),title: Text('Quiz'),)
+        ]
+        ),
+      ),
+    );
+  }
+}
+//Drawer
+
+class Menu extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
             child:ListView(
               children:[
         DrawerHeader(
@@ -62,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
             //mainAxisAlignment:MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.start,
            children: [
-             Text(userName,
+             Text(_userName,
             style: TextStyle(
               color: Colors.black,
               fontSize: 24,
@@ -87,7 +142,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ListTile(
           leading: Icon(Icons.settings),
           title: Text('Log Out'),
-          onTap: (){
+          onTap: ()async{
+            final shared=await SharedPreferences.getInstance();
+            shared.setBool('isLoggedIn', false);
             _auth.signOut();
             Navigator.popUntil(context,ModalRoute.withName(LoginScreen.id));
             },
@@ -95,22 +152,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 
               ]
             )
-          ),
-        body: Container(
-          
-          child:Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-            TopicTile(text: 'Physics', link: 'br_AX6oWdw4'),
-            TopicTile(text: 'Chemistry', link: 'br_AX6oWdw4'),
-            TopicTile(text: 'Maths', link: 'br_AX6oWdw4')
-            ],
-          )
-        ),
-
-
-        bottomNavigationBar: BottomBar(),
-      ),
-    );
+          );
   }
 }

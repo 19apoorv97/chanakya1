@@ -10,6 +10,7 @@ void main() {
   runApp(MyApp());
 }
 
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -21,8 +22,8 @@ class MyApp extends StatelessWidget {
         LoginScreen.id:(context)=> LoginScreen(),
         RegistrationScreen.id:(context)=> RegistrationScreen(),
         MyHomePage.id: (context)=> MyHomePage(),
-        Notes.id:(context)=>Notes(),
-        Assignment.id:(context)=>Assignment(),
+        //Notes.id:(context)=>Notes(),
+        //Assignment.id:(context)=>Assignment(),
         Quizzler.id:(context)=>Quizzler()
       },
     );
